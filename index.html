@@ -1,36 +1,370 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eren Labs</title>
+    <meta name="description" content="Eren Labs - Innovation in technology and artificial intelligence">
+    <title>Eren Labs | Technology & AI Innovation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #0d1117;
-            color: #c9d1d9;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #e0e6f0;
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
         }
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(90deg, #58a6ff, #bc8cff);
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-container {
+            margin-bottom: 3rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -2px;
+            margin-bottom: 1rem;
+            animation: gradientShift 8s ease infinite;
+            background-size: 200% 200%;
         }
-        p {
-            font-size: 1.2rem;
-            color: #8b949e;
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            color: #a0aec0;
+            margin-bottom: 2rem;
+            font-weight: 400;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            animation: fadeInUp 1s ease-out 0.3s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: #10b981;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #cbd5e0;
+            margin-bottom: 2.5rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #e0e6f0;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-desc {
+            font-size: 0.85rem;
+            color: #a0aec0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px 0 rgba(102, 126, 234, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px 0 rgba(102, 126, 234, 0.6);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .background-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-radius: 50%;
+            filter: blur(40px);
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            top: -150px;
+            left: -150px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .shape-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -200px;
+            right: -200px;
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(50px, 50px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.5rem;
+            }
+
+            .tagline {
+                font-size: 1.2rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
+
 <body>
-    <h1>Eren Labs</h1>
-    <p>Future site of something amazing.</p>
+    <div class="background-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+    </div>
+
+    <div class="container">
+        <div class="logo-container">
+            <h1 class="logo">Eren Labs</h1>
+            <p class="tagline">Innovating the Future of Technology</p>
+        </div>
+
+        <div class="card">
+            <div class="status-badge">
+                <span class="status-dot"></span>
+                <span>Website Live</span>
+            </div>
+
+            <p class="description">
+                Welcome to Eren Labs. We're building the next generation of intelligent systems
+                and cutting-edge solutions. Our focus is on artificial intelligence, automation,
+                and innovative technology that shapes tomorrow.
+            </p>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🤖</div>
+                    <div class="feature-title">AI Innovation</div>
+                    <div class="feature-desc">Next-gen artificial intelligence solutions</div>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">Automation</div>
+                    <div class="feature-desc">Streamlined intelligent workflows</div>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">🌐</div>
+                    <div class="feature-title">Web Tech</div>
+                    <div class="feature-desc">Modern web applications & platforms</div>
+                </div>
+            </div>
+
+            <button class="cta-button" onclick="alert('Coming Soon!')">Learn More</button>
+        </div>
+    </div>
+
+    <script>
+        // Add smooth scroll behavior
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('Eren Labs website loaded successfully!');
+        });
+    </script>
 </body>
+
 </html>
