@@ -1,74 +1,588 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EREN AGI Core | Interactive Simulation v2.0</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>EREN AGI Core | Interactive Simulation v1.1</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #050505; font-family: 'Courier New', Courier, monospace; }
+        #canvas-container { width: 100vw; height: 100vh; display: block; cursor: crosshair; position: absolute; top: 0; left: 0; z-index: 0; }
+        
+        /* UI Overlay */
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            box-sizing: border-box;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 10;
+        }
+
+        .hud-panel {
+            background: rgba(10, 15, 20, 0.9);
+            border: 1px solid #00ffcc;
+            padding: 15px;
+            color: #00ffcc;
+            backdrop-filter: blur(8px);
+            pointer-events: auto;
+            max-width: 350px;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.15);
+        }
+
+        h1 { font-size: 16px; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #004433; padding-bottom: 5px; }
+        h2 { font-size: 13px; color: #fff; margin: 10px 0 5px 0; border-left: 2px solid #00ffcc; padding-left: 8px; }
+        p { font-size: 11px; color: #aaccbb; margin: 0 0 8px 0; line-height: 1.3; }
+
+        .stat-row { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 11px; }
+        .bar-container { width: 100%; height: 3px; background: #222; margin-bottom: 8px; position: relative; }
+        .bar-fill { height: 100%; background: #00ffcc; width: 0%; transition: width 0.2s; }
+
+        /* Interactive Controls Area */
+        .control-group { border: 1px solid #333; padding: 10px; margin-top: 10px; background: rgba(0,0,0,0.3); }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+
+        button {
+            background: rgba(0, 255, 204, 0.05);
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            padding: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 10px;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+        button:hover { background: rgba(0, 255, 204, 0.2); box-shadow: 0 0 8px rgba(0, 255, 204, 0.4); }
+        button:active { background: #00ffcc; color: #000; }
+        
+        /* Module Grid Visualization */
+        .module-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 5px; }
+        .module-box { 
+            border: 1px solid #444; 
+            padding: 4px; 
+            text-align: center; 
+            font-size: 9px; 
+            color: #666;
+            transition: 0.3s;
+        }
+        .mod-mem.active { background: #0088ff; color: white; border-color: #0088ff; box-shadow: 0 0 10px #0088ff; }
+        .mod-learn.active { background: #00ffcc; color: black; border-color: #00ffcc; box-shadow: 0 0 10px #00ffcc; }
+        .mod-pfc.active { background: #ff00ff; color: white; border-color: #ff00ff; box-shadow: 0 0 10px #ff00ff; }
+        .mod-sim.active { background: #ffaa00; color: black; border-color: #ffaa00; box-shadow: 0 0 10px #ffaa00; }
+
+        /* Tooltip */
+        #tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 8px;
+            font-size: 11px;
+            display: none;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        #log-console {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            height: 120px;
+            overflow-y: hidden;
+            border-left: 2px solid #00ffcc;
+            background: linear-gradient(90deg, rgba(0,0,0,0.9), rgba(0,0,0,0));
+            font-size: 10px;
+            color: #00ff88;
+            padding: 10px;
+            display: flex;
+            flex-direction: column-reverse;
+            pointer-events: none;
+        }
+        .log-entry { margin-top: 3px; opacity: 0.8; text-shadow: 0 0 2px black; }
+
+        #top-right { position: absolute; top: 20px; right: 20px; text-align: right; pointer-events: none; }
+        .blink { animation: blinker 2s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+
+    </style>
+    <!-- Three.js & OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
-
 <body>
-    <div class="background-glow"></div>
 
-    <canvas id="networkCanvas"></canvas>
+    <div id="canvas-container"></div>
+    <div id="tooltip"></div>
 
-    <div class="ui-layer">
-        <header class="header">
-            <div class="brand">
-                <h1 class="logo">EREN LABS</h1>
-                <div class="subtitle">AGI Research & Development</div>
-            </div>
-        </header>
+    <div id="ui-layer">
+        <!-- Control Panel -->
+        <div class="hud-panel">
+            <h1>EREN AGI Control <span class="blink">●</span></h1>
+            
+            <div class="stat-row"><span>Status:</span><span id="sys-status">ACTIVE</span></div>
+            <div class="stat-row"><span>Active Nodes:</span><span id="active-cells">0 / 150</span></div>
+            <div class="stat-row"><span>Network Coherence:</span><span id="coherence-val">0.00%</span></div>
+            <div class="bar-container"><div id="coherence-bar" class="bar-fill"></div></div>
 
-        <div class="control-panel">
-            <div class="panel-header">
-                <span>SYSTEM STATUS</span>
-                <div class="status-indicator"></div>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <span class="stat-label">Active Nodes</span>
-                    <span class="stat-value" id="stat-active">0</span>
+            <!-- Focused Cell Info -->
+            <div id="focus-panel" style="border-top: 1px solid #333; margin-top:10px; padding-top:5px;">
+                <h2>Cell Inspector [HOVER]</h2>
+                <div class="stat-row"><span>ID:</span><span id="focus-id">--</span></div>
+                <div class="stat-row"><span>Activation:</span><span id="focus-act">--</span></div>
+                
+                <div class="module-grid">
+                    <div id="disp-mem" class="module-box mod-mem">MEMORY</div>
+                    <div id="disp-learn" class="module-box mod-learn">LEARN</div>
+                    <div id="disp-pfc" class="module-box mod-pfc">PFC</div>
+                    <div id="disp-sim" class="module-box mod-sim">SIM</div>
                 </div>
-                <div class="stat-item">
-                    <span class="stat-label">Coherence</span>
-                    <span class="stat-value" id="stat-coherence">100%</span>
+            </div>
+
+            <!-- Interactions -->
+            <div class="control-group">
+                <h2>Signal Injection</h2>
+                <p>Select input modality to bias distributed modules.</p>
+                <div class="btn-grid">
+                    <button onclick="injectSignal('sensory')">Sensory Stream</button>
+                    <button onclick="injectSignal('logic')">Logic / Plan</button>
+                    <button onclick="injectSignal('recall')">Deep Recall</button>
+                    <button onclick="resetSim()" style="border-color:#ff4444; color:#ff4444;">Reset System</button>
                 </div>
             </div>
 
-            <div class="controls-section">
-                <div class="panel-header">SIGNAL INJECTION</div>
-                <button class="btn btn-primary" id="btn-sensory">
-                    <span>⚡ Sensory Stream</span>
-                </button>
-                <button class="btn btn-primary" id="btn-logic">
-                    <span>🧠 Logic / Plan</span>
-                </button>
-                <button class="btn btn-primary" id="btn-recall">
-                    <span>💾 Deep Recall</span>
-                </button>
+            <div class="control-group">
+                <h2>Topology Control</h2>
+                <button onclick="rewireNetwork()">Dynamic Rewire (Small World)</button>
             </div>
+            
+            <p style="margin-top:10px; font-size:9px; color:#666;">
+                Controls: Left Click (Rotate) | Right Click (Pan) | Scroll (Zoom)
+            </p>
+        </div>
 
-            <div class="controls-section">
-                <div class="panel-header">NETWORK TOPOLOGY</div>
-                <button class="btn" id="btn-rewire">
-                    <span>🔄 Dynamic Rewire (Small World)</span>
-                </button>
-                <button class="btn btn-danger" id="btn-reset">
-                    <span>⚠️ Reset System</span>
-                </button>
-            </div>
+        <div id="top-right">
+            <h1 style="border:none; color: #666; font-size: 24px;">CORE VIEW</h1>
+            <p style="color: #444;">EREN DISTRIBUTED ARCHITECTURE v1.1</p>
+        </div>
+
+        <div id="log-console">
+            <div class="log-entry"> > System Ready. Waiting for input...</div>
         </div>
     </div>
 
-    <script src="simulation.js"></script>
-</body>
+    <script>
+        // --- 1. AGI CORE LOGIC ---
 
+        const CONFIG = {
+            cellCount: 150,
+            connectionRadius: 18,
+            rewireProb: 0.08,
+            decay: 0.95
+        };
+
+        class AGICell {
+            constructor(id, x, y, z) {
+                this.id = id;
+                this.pos = new THREE.Vector3(x, y, z);
+                this.connections = []; // Neighbors
+                this.activation = 0.0;
+                this.targetActivation = 0.0;
+                
+                // Module Bias (0-1)
+                this.modules = {
+                    memory: 0.25,
+                    learning: 0.25,
+                    pfc: 0.25,
+                    sim: 0.25
+                };
+                
+                this.dominantModule = 'learning'; // For visualization color
+            }
+
+            // Recalculate module weights based on signal type
+            processInput(type, strength) {
+                this.targetActivation = Math.min(this.targetActivation + strength, 1.2); 
+                
+                switch(type) {
+                    case 'sensory': // Biases Learning & Memory
+                        this.biasModules(0.3, 0.5, 0.1, 0.1); 
+                        this.dominantModule = 'learning';
+                        break;
+                    case 'logic': // Biases PFC & Simulation
+                        this.biasModules(0.1, 0.1, 0.5, 0.3);
+                        this.dominantModule = 'pfc';
+                        break;
+                    case 'recall': // Biases Memory & Simulation
+                        this.biasModules(0.6, 0.1, 0.1, 0.2);
+                        this.dominantModule = 'memory';
+                        break;
+                    default: 
+                         this.biasModules(0.25, 0.25, 0.25, 0.25);
+                }
+            }
+
+            biasModules(mem, learn, pfc, sim) {
+                const rate = 0.2;
+                this.modules.memory = THREE.MathUtils.lerp(this.modules.memory, mem, rate);
+                this.modules.learning = THREE.MathUtils.lerp(this.modules.learning, learn, rate);
+                this.modules.pfc = THREE.MathUtils.lerp(this.modules.pfc, pfc, rate);
+                this.modules.sim = THREE.MathUtils.lerp(this.modules.sim, sim, rate);
+            }
+
+            update() {
+                this.activation = THREE.MathUtils.lerp(this.activation, this.targetActivation, 0.1);
+                this.targetActivation *= CONFIG.decay;
+                
+                if (this.activation < 0.01) {
+                    this.activation = 0;
+                    this.targetActivation = 0;
+                }
+            }
+        }
+
+        let cells = [];
+
+        // --- 2. THREE.JS VISUALIZATION ---
+
+        let scene, camera, renderer, controls;
+        let cellMesh, lineMesh;
+        let raycaster, mouse;
+        let hoveredIndex = -1;
+
+        // Color Palettes
+        const COLORS = {
+            base: new THREE.Color(0x001122),
+            memory: new THREE.Color(0x0088ff),   // Blue
+            learning: new THREE.Color(0x00ffcc), // Teal
+            pfc: new THREE.Color(0xff00ff),      // Magenta
+            sim: new THREE.Color(0xffaa00)       // Orange
+        };
+
+        function init() {
+            const container = document.getElementById('canvas-container');
+            
+            // Renderer Setup
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false }); // Alpha false for solid background
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for performance
+            container.appendChild(renderer.domElement);
+
+            // Scene
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x050505, 0.006);
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
+            camera.position.set(40, 30, 60);
+
+            // Controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.5;
+            controls.target.set(0,0,0); // Ensure looking at center
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0x444444);
+            scene.add(ambientLight);
+            
+            const pLight = new THREE.PointLight(0xffffff, 1, 100);
+            pLight.position.set(0, 20, 20);
+            scene.add(pLight);
+
+            // --- Robust Procedural Environment (No External Images) ---
+            addProceduralEnvironment();
+
+            // Gen System
+            generateCells();
+            generateConnections();
+
+            // Interaction
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+            
+            window.addEventListener('resize', onResize);
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mousedown', onMouseClick); // Changed from click to mousedown for better response
+
+            animate();
+            log("System Visualizer Initialized.");
+        }
+
+        function addProceduralEnvironment() {
+            // Polar Grid Floor
+            const gridHelper = new THREE.PolarGridHelper(100, 16, 8, 64, 0x004433, 0x002211);
+            gridHelper.position.y = -40;
+            scene.add(gridHelper);
+
+            // Subtle particles for depth
+            const partGeo = new THREE.BufferGeometry();
+            const partPos = [];
+            for(let i=0; i<400; i++) {
+                partPos.push(
+                    (Math.random() - 0.5) * 300,
+                    (Math.random() - 0.5) * 300,
+                    (Math.random() - 0.5) * 300
+                );
+            }
+            partGeo.setAttribute('position', new THREE.Float32BufferAttribute(partPos, 3));
+            const partMat = new THREE.PointsMaterial({ color: 0x004433, size: 1, transparent: true, opacity: 0.4 });
+            scene.add(new THREE.Points(partGeo, partMat));
+        }
+
+        function generateCells() {
+            cells = [];
+            const geo = new THREE.BufferGeometry();
+            const pos = [];
+            const col = [];
+
+            for(let i=0; i<CONFIG.cellCount; i++) {
+                // Sphere distribution
+                const phi = Math.acos(-1 + (2 * i) / CONFIG.cellCount);
+                const theta = Math.sqrt(CONFIG.cellCount * Math.PI) * phi;
+                const r = 25 + (Math.random() * 8); // Radius
+                
+                const x = r * Math.cos(theta) * Math.sin(phi);
+                const y = r * Math.sin(theta) * Math.sin(phi);
+                const z = r * Math.cos(phi);
+
+                cells.push(new AGICell(i, x, y, z));
+                pos.push(x, y, z);
+                col.push(0, 0.1, 0.2); // Init dark
+            }
+
+            geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+            geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+
+            // Use CanvasTexture for reliability (no external image load fail)
+            const spriteMap = new THREE.CanvasTexture(createDotCanvas());
+
+            const mat = new THREE.PointsMaterial({
+                size: 3.5, // Increased size for visibility
+                vertexColors: true,
+                map: spriteMap,
+                alphaTest: 0.1,
+                transparent: true,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            });
+
+            cellMesh = new THREE.Points(geo, mat);
+            scene.add(cellMesh);
+        }
+
+        function generateConnections() {
+            if(lineMesh) scene.remove(lineMesh);
+
+            const pos = [];
+            cells.forEach((c1, i) => {
+                c1.connections = []; 
+                cells.forEach((c2, j) => {
+                    if(i<=j) return;
+                    const d = c1.pos.distanceTo(c2.pos);
+                    // Small World Logic
+                    if(d < CONFIG.connectionRadius || Math.random() < CONFIG.rewireProb/10) {
+                        c1.connections.push(c2);
+                        c2.connections.push(c1);
+                        pos.push(c1.pos.x, c1.pos.y, c1.pos.z);
+                        pos.push(c2.pos.x, c2.pos.y, c2.pos.z);
+                    }
+                });
+            });
+
+            const geo = new THREE.BufferGeometry();
+            geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+            
+            const mat = new THREE.LineBasicMaterial({
+                color: 0x00ccaa,
+                transparent: true,
+                opacity: 0.1,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            });
+
+            lineMesh = new THREE.LineSegments(geo, mat);
+            scene.add(lineMesh);
+            log(`Topology Built: ${pos.length/2} Synapses.`);
+        }
+
+        // --- 3. ANIMATION LOOP ---
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+
+            const colors = cellMesh.geometry.attributes.color.array;
+            let activeCount = 0;
+            let totalAct = 0;
+
+            // Update Cells
+            cells.forEach((cell, i) => {
+                cell.update();
+
+                if(cell.activation > 0.15) {
+                    activeCount++;
+                    totalAct += cell.activation;
+                    // Propagate
+                    if(Math.random() < 0.1) { 
+                        const neighbor = cell.connections[Math.floor(Math.random()*cell.connections.length)];
+                        if(neighbor) neighbor.processInput(cell.dominantModule, cell.activation * 0.15);
+                    }
+                }
+
+                // Visual Update
+                const cIdx = i * 3;
+                const base = COLORS.base;
+                const target = COLORS[cell.dominantModule] || COLORS.learning;
+                
+                const r = THREE.MathUtils.lerp(base.r, target.r, cell.activation);
+                const g = THREE.MathUtils.lerp(base.g, target.g, cell.activation);
+                const b = THREE.MathUtils.lerp(base.b, target.b, cell.activation);
+
+                if (i === hoveredIndex) {
+                    colors[cIdx] = 1.0; colors[cIdx+1] = 1.0; colors[cIdx+2] = 1.0;
+                } else {
+                    colors[cIdx] = r; colors[cIdx+1] = g; colors[cIdx+2] = b;
+                }
+            });
+
+            cellMesh.geometry.attributes.color.needsUpdate = true;
+            
+            // Pulse lines
+            if(lineMesh) lineMesh.material.opacity = 0.1 + (totalAct / CONFIG.cellCount) * 0.4;
+
+            updateUI(activeCount, totalAct);
+            renderer.render(scene, camera);
+        }
+
+        // --- 4. INTERACTION ---
+
+        function onMouseMove(event) {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObject(cellMesh);
+
+            if (intersects.length > 0) {
+                const idx = intersects[0].index;
+                if (hoveredIndex !== idx) {
+                    hoveredIndex = idx;
+                    document.body.style.cursor = 'pointer';
+                    controls.autoRotate = false; 
+                    updateTooltip(event.clientX, event.clientY, idx);
+                    updateFocusPanel(cells[idx]);
+                }
+            } else {
+                hoveredIndex = -1;
+                document.body.style.cursor = 'crosshair';
+                controls.autoRotate = true;
+                hideTooltip();
+            }
+        }
+
+        function onMouseClick() {
+            if (hoveredIndex !== -1) {
+                cells[hoveredIndex].processInput('logic', 1.0);
+                log(`Manual Override: Node ${cells[hoveredIndex].id} Fired.`);
+            }
+        }
+
+        function updateUI(active, total) {
+            document.getElementById('active-cells').innerText = `${active} / ${CONFIG.cellCount}`;
+            const coh = Math.min((total / 10) * 100, 100).toFixed(1);
+            document.getElementById('coherence-val').innerText = `${coh}%`;
+            document.getElementById('coherence-bar').style.width = `${coh}%`;
+        }
+
+        function updateFocusPanel(cell) {
+            document.getElementById('focus-id').innerText = cell.id;
+            document.getElementById('focus-act').innerText = cell.activation.toFixed(3);
+            document.querySelectorAll('.module-box').forEach(el => el.classList.remove('active'));
+            const m = cell.modules;
+            if(m.memory > 0.3) document.getElementById('disp-mem').classList.add('active');
+            if(m.learning > 0.3) document.getElementById('disp-learn').classList.add('active');
+            if(m.pfc > 0.3) document.getElementById('disp-pfc').classList.add('active');
+            if(m.sim > 0.3) document.getElementById('disp-sim').classList.add('active');
+        }
+
+        function updateTooltip(x, y, idx) {
+            const el = document.getElementById('tooltip');
+            el.style.display = 'block';
+            el.style.left = x + 15 + 'px';
+            el.style.top = y + 15 + 'px';
+            el.innerHTML = `Node ID: ${idx}<br>Role: ${cells[idx].dominantModule.toUpperCase()}`;
+        }
+
+        function hideTooltip() {
+            document.getElementById('tooltip').style.display = 'none';
+        }
+
+        // --- PUBLIC FUNCTIONS ---
+
+        window.injectSignal = function(type) {
+            const count = 10;
+            log(`Injecting Signal Stream: [${type.toUpperCase()}]`);
+            for(let i=0; i<count; i++) {
+                const rnd = Math.floor(Math.random() * CONFIG.cellCount);
+                cells[rnd].processInput(type, 0.8);
+            }
+        }
+
+        window.rewireNetwork = function() {
+            log("Rewiring Synaptic Topology...");
+            generateConnections();
+        }
+
+        window.resetSim = function() {
+            cells.forEach(c => {
+                c.activation = 0;
+                c.targetActivation = 0;
+            });
+            log("System Reset.");
+        }
+
+        function onResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function createDotCanvas() {
+            const c = document.createElement('canvas');
+            c.width = 64; c.height = 64; // Power of 2
+            const ctx = c.getContext('2d');
+            
+            // Glow
+            const grd = ctx.createRadialGradient(32,32,4, 32,32,28);
+            grd.addColorStop(0, "rgba(255,255,255,1)");
+            grd.addColorStop(0.5, "rgba(255,255,255,0.8)");
+            grd.addColorStop(1, "rgba(255,255,255,0)");
+            
+            ctx.fillStyle = grd;
+            ctx.fillRect(0,0,64,64);
+            return c;
+        }
+
+        function log(msg) {
+            const box = document.getElementById('log-console');
+            const d = document.createElement('div');
+            d.className = 'log-entry';
+            d.innerHTML = `> ${msg}`;
+            box.prepend(d);
+            if(box.children.length > 8) box.lastChild.remove();
+        }
+
+        // Init after DOM load
+        window.onload = init;
+    </script>
+</body>
 </html>
