@@ -943,6 +943,88 @@
 
         window.onload = init;
     </script>
+    <!-- EREN-SERVER CONNECTOR WIDGET -->
+    <div id="server-status-card" style="
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        border: 1px solid #333;
+        background: #111;
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        font-family: sans-serif;
+        text-align: center;
+        min-width: 200px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    ">
+        <div
+            style="font-size: 0.8rem; color: #888; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">
+            Eren Server Link</div>
+
+        <div id="status-text" style="font-weight: bold; font-size: 1rem; margin-bottom: 8px;">
+            ⚪ Scanning...
+        </div>
+
+        <a id="connect-btn" href="https://tunnel.erenlabs.com" target="_blank" style="
+            display: none; 
+            text-decoration: none; 
+            background-color: #00ff41; 
+            color: black; 
+            padding: 6px 12px; 
+            border-radius: 4px; 
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        ">
+            ACCESS SYSTEM
+        </a>
+
+        <div id="offline-msg" style="display: none; color: #ff4444; font-size: 0.8rem;">
+            Device is sleeping.
+        </div>
+    </div>
+
+    <script>
+        async function checkServer() {
+            const tunnelUrl = 'https://tunnel.erenlabs.com';
+            const statusText = document.getElementById('status-text');
+            const connectBtn = document.getElementById('connect-btn');
+            const offlineMsg = document.getElementById('offline-msg');
+
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 3000);
+
+                const response = await fetch(`${tunnelUrl}/api/stats`, {
+                    signal: controller.signal,
+                    method: 'GET',
+                    mode: 'cors'
+                });
+
+                clearTimeout(timeoutId);
+
+                if (response.ok) {
+                    statusText.innerHTML = '🟢 ONLINE';
+                    statusText.style.color = '#00ff41';
+                    connectBtn.style.display = 'inline-block';
+                    offlineMsg.style.display = 'none';
+                } else {
+                    throw new Error('Server returned error');
+                }
+
+            } catch (error) {
+                statusText.innerHTML = '🔴 OFFLINE';
+                statusText.style.color = '#ff4444';
+                connectBtn.style.display = 'none';
+                offlineMsg.style.display = 'block';
+            }
+        }
+
+        checkServer();
+        setInterval(checkServer, 10000);
+    </script>
 </body>
 
 </html>
