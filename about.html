@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | ErenLabs</title>
+    <link rel="canonical" href="https://www.erenlabs.com/about.html">
+    <link rel="icon" href="assets/media/favicon.png" type="image/x-icon">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/theme.css?v=2.0">
+    <link rel="stylesheet" href="assets/css/base.css?v=2.0">
+    <link rel="stylesheet" href="assets/css/layout.css?v=2.0">
+    <link rel="stylesheet" href="assets/css/animations.css?v=2.0">
+    <link rel="stylesheet" href="assets/css/auth.css?v=2.0">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <a href="index.html" style="text-decoration: none; color: inherit;">
+                <div style="font-weight:700; font-size: 1.25rem;">EREN</div>
+            </a>
+            <nav style="display: flex; align-items: center; gap: 1rem; margin-left: auto;">
+                <a href="about.html"
+                    style="text-decoration: none; color: var(--text-primary); font-weight: 500; font-size: 0.9rem;">ABOUT</a>
+                <!-- Admin Login Button -->
+                <button id="admin-login-btn" class="admin-btn">
+                    <span>🔒</span> ADMIN ACCESS
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- Hero Section -->
+        <section class="hero" style="min-height: 60vh; display: flex; flex-direction: column; justify-content: center;">
+            <div class="hero-reveal-container">
+                <h1 class="hero-title-advanced" style="font-size: 2.5rem; margin-bottom: 2rem;">About ErenLabs</h1>
+            </div>
+
+            <div class="animate-fade-in delay-2">
+                <p
+                    style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 2rem; color: var(--text-secondary); max-width: 800px;">
+                    ErenLabs is an independent research and systems laboratory focused on intelligent systems,
+                    experimental infrastructure, and live integrations.
+                </p>
+
+                <p
+                    style="font-size: 1.1rem; line-height: 1.6; color: var(--text-secondary); border-left: 3px solid var(--accent); padding-left: 1.5rem; background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 0 8px 8px 0; max-width: 800px;">
+                    This project is not affiliated with Erenlabs GmbH or any similarly named organization.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            &copy; 2025 Eren. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="login-modal" class="auth-modal">
+        <div class="modal-content">
+            <button id="close-modal" class="close-modal">&times;</button>
+            <div class="auth-header">
+                <h2>System Access</h2>
+                <div style="font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 1px;">AUTHORIZED PERSONNEL
+                    ONLY</div>
+            </div>
+
+            <form id="login-form" class="login-form">
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="IDENTIFIER" autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="ACCESS KEY">
+                </div>
+
+                <button type="submit" class="submit-btn">Initialize Session</button>
+                <div id="login-status" class="status-msg"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/auth.js?v=2.0"></script>
+    <script src="assets/js/animations.js?v=2.0"></script>
+    <script src="assets/js/api.js?v=2.0"></script>
+    <script src="assets/js/main.js?v=2.0"></script>
+</body>
+
+</html>
