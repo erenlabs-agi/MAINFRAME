@@ -7,10 +7,15 @@
 }
 
 header {
-    padding: 2rem 0;
-    /* remove display: flex from here as it only holds container */
-    position: relative;
-    z-index: 10;
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(5, 5, 10, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    transition: all 0.3s ease;
 }
 
 header .container {
@@ -194,12 +199,9 @@ header .container {
     backdrop-filter: blur(10px);
     position: relative;
     /* Full width breakout */
-    width: 100vw;
-    position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
+    width: 100%;
+
+    /* Removed breakout hack as this is a top-level section */
 }
 
 .about-inner {
@@ -212,9 +214,27 @@ header .container {
 }
 
 @media (max-width: 768px) {
+    .about-wrapper {
+        padding: 2rem 1rem;
+        margin: 4rem 0;
+    }
+
     .about-inner {
         grid-template-columns: 1fr;
-        padding: 0 1rem;
+        padding: 0;
+        gap: 2rem;
+        text-align: center;
+        /* Center text on mobile for better look */
+    }
+
+    .hacker-box {
+        padding: 1.5rem !important;
+        /* Force smaller padding */
+    }
+
+    .about-inner h2 {
+        font-size: 2rem !important;
+        /* Smaller title */
     }
 }
 
