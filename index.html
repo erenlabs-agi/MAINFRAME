@@ -1,93 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eren | Research & Systems</title>
-    
+    <title>Eren | Research </title>
+
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/theme.css">
     <link rel="stylesheet" href="assets/css/base.css">
     <link rel="stylesheet" href="assets/css/layout.css">
     <link rel="stylesheet" href="assets/css/animations.css">
-    
+    <link rel="stylesheet" href="assets/css/auth.css">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
     <header>
         <div class="container">
             <div style="font-weight:700; font-size: 1.25rem;">EREN</div>
-            <nav>
-                <!-- Simple nav if needed, or just let the cards do the work -->
+            <nav style="display: flex; align-items: center; gap: 1rem;">
+                <!-- Admin Login Button -->
+                <button id="admin-login-btn" class="admin-btn">
+                    <span>🔒</span> ADMIN ACCESS
+                </button>
             </nav>
         </div>
     </header>
 
     <main class="container">
-        
+
         <!-- Hero Section -->
         <section class="hero">
-            <h1 class="animate-fade-in delay-1">Central gateway for research, systems, and intelligence.</h1>
-            <div class="hero-subtitle animate-fade-in delay-2">
-                Access technical research logs, live experimental data streams, and system integration APIs developed under the Eren ecosystem.
+            <div class="hero-reveal-container">
+                <h1 class="hero-title-advanced">Central Gateway for Research, Systems, and Intelligence through Eren
+                </h1>
+            </div>
+            <div class="hero-subtitle animate-fade-in delay-2" style="font-size: 1.1rem; margin-top: 1rem;">
+                Access technical research logs, live experimental data streams, and system integration APIs developed
+                under the Eren ecosystem.
             </div>
         </section>
 
-        <!-- Navigation Cards -->
-        <section class="grid-cards animate-fade-in delay-3">
-            <a href="pages/research.html" class="card">
-                <h3>Research Logs</h3>
-                <p>Technical research notes, experiments, findings, and progress logs across AGI, IoT, and system design.</p>
-            </a>
-            
-            <a href="pages/live.html" class="card">
-                <h3>Live Data Streams</h3>
-                <p>Real-time telemetry from live IoT systems and experimental projects.</p>
-            </a>
-            
-            <a href="pages/api.html" class="card">
-                <h3>APIs & Integrations</h3>
-                <p>Access points and documentation for software applications and system interfaces.</p>
-            </a>
-            
-            <a href="pages/contact.html" class="card">
-                <h3>Contact</h3>
-                <p>Professional collaboration, research discussions, and technical inquiries.</p>
-            </a>
+        <!-- Access Points Segment -->
+        <section class="access-points-wrapper">
+            <div class="section-marker animate-fade-in delay-2">AVAILABLE SERVERS</div>
+
+            <div class="grid-cards animate-fade-in delay-3">
+                <a href="pages/research.html" class="card">
+                    <span class="card-corners"></span>
+                    <h3>Research Logs</h3>
+                    <p>Technical research notes, experiments, findings, and progress logs across AGI, IoT, and system
+                        design.</p>
+                </a>
+
+                <a href="pages/live.html" class="card">
+                    <span class="card-corners"></span>
+                    <h3>Live Data Streams</h3>
+                    <p>Real-time telemetry from live IoT systems and experimental projects.</p>
+                </a>
+
+                <a href="pages/api.html" class="card">
+                    <span class="card-corners"></span>
+                    <h3>APIs & Integrations</h3>
+                    <p>Access points and documentation for software applications and system interfaces.</p>
+                </a>
+
+                <a href="pages/contact.html" class="card">
+                    <span class="card-corners"></span>
+                    <h3>Contact</h3>
+                    <p>Professional collaboration, research discussions, and technical inquiries.</p>
+                </a>
+            </div>
         </section>
 
-        <!-- About Section -->
-        <section class="about-section reveal">
-            <div>
-                <h2 style="font-size: 2.5rem; margin-bottom: 2rem; color: var(--text-primary);">About Eren</h2>
-                <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
-                    I am an Electronics and Communication Engineer with experience in multi-stage IoT projects, including CubeSat systems, weather monitoring platforms, and data acquisition units.
-                </p>
-                <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
-                    I have also developed software systems such as flight and ticket booking platforms backed by SQL databases.
-                </p>
-                <p style="font-size: 1.1rem; color: var(--text-secondary);">
-                    Currently, my primary focus is on <strong style="color: var(--accent);">Artificial General Intelligence (AGI)</strong>, working on system architecture, learning mechanisms, and real-world integrations.
-                </p>
-            </div>
-            
-            <div>
-                <!-- Phone Animation / Graphic -->
-                <div class="device-mockup">
-                    <div class="device-screen">
-                        <div style="text-align: center; font-size: 1rem; color: #666;">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">📱</div>
-                            <div>System Connected</div>
-                            <div style="font-size: 0.8rem; margin-top: 5px;">Gateway Online</div>
-                        </div>
-                    </div>
+        <!-- About Section (Isolated) -->
+    </main> <!-- Close main container momentarily to break out -->
+
+    <section class="about-wrapper reveal">
+        <div class="about-inner">
+            <div class="hacker-box" style="padding: 2rem; border-radius: 10px;">
+                <h2 class="glitch-text" data-text="About Me"
+                    style="font-size: 3rem; margin-bottom: 2rem; color: var(--text-primary); text-transform: uppercase; letter-spacing: 2px;">
+                    About Me</h2>
+
+                <div class="slide-in-left reveal">
+                    <p
+                        style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 1.5rem; border-left: 2px solid var(--accent); padding-left: 1rem;">
+                        I am <strong style="color: var(--accent);">Eren</strong>.
+                    </p>
+                    <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                        I am an Electronics and Communication Engineer specializing in <span
+                            style="color: var(--text-primary);">multi-stage IoT architectures</span> and widespread
+                        system integration. From CubeSat telemetry to custom data acquisition units, I build systems
+                        that connect the physical world to the digital void.
+                    </p>
+                    <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                        Be it flight booking engines backed by SQL or real-time hardware control, my code runs where it
+                        matters.
+                    </p>
+                    <p style="font-size: 1.1rem; color: var(--text-secondary);">
+                        Currently, I am architecting <strong style="color: var(--accent);">Artificial General
+                            Intelligence (AGI)</strong> systems—focusing on the bridge between cognitive architectures
+                        and real-world execution.
+                    </p>
                 </div>
             </div>
-        </section>
+
+            <div style="display: flex; justify-content: center;" class="slide-in-right reveal">
+                <!-- Profile Image with Holographic Container -->
+                <div class="profile-container float">
+                    <div class="scanline"></div>
+                    <img src="assets/media/profile.jpg" alt="Eren Profile" class="profile-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="container"> <!-- Re-open main for footer alignment if needed, or just leave it for the footer -->
 
     </main>
 
@@ -97,9 +132,35 @@
         </div>
     </footer>
 
+    <!-- Auth Modal -->
+    <div id="login-modal" class="auth-modal">
+        <div class="modal-content">
+            <button id="close-modal" class="close-modal">&times;</button>
+            <div class="auth-header">
+                <h2>System Access</h2>
+                <div style="font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 1px;">AUTHORIZED PERSONNEL
+                    ONLY</div>
+            </div>
+
+            <form id="login-form" class="login-form">
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="IDENTIFIER" autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="ACCESS KEY">
+                </div>
+
+                <button type="submit" class="submit-btn">Initialize Session</button>
+                <div id="login-status" class="status-msg"></div>
+            </form>
+        </div>
+    </div>
+
     <!-- Scripts -->
+    <script src="assets/js/auth.js"></script>
     <script src="assets/js/animations.js"></script>
     <script src="assets/js/api.js"></script>
     <script src="assets/js/main.js"></script>
 </body>
+
 </html>

@@ -1,4 +1,4 @@
-/* layout.css */
+/* layout.css - Segmented Edition */
 .container {
     width: 100%;
     max-width: 1200px;
@@ -8,82 +8,213 @@
 
 header {
     padding: 2rem 0;
+    /* remove display: flex from here as it only holds container */
+    position: relative;
+    z-index: 10;
+}
+
+header .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+/* Hero Segment - Distinct Top Section */
 .hero {
-    min-height: 60vh;
+    min-height: 70vh;
+    /* Taller */
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-top: 4rem;
+    padding-top: 2rem;
+    position: relative;
+    /* Subtle Grid Background for separation */
+    background-image:
+        linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    margin-bottom: 4rem;
+    border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent, var(--bg-primary));
 }
 
 .hero h1 {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    margin-bottom: 1rem;
-    background: linear-gradient(to right, #fff, #999);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-size: clamp(3rem, 6vw, 5rem);
+    /* Bigger */
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+    /* Text styling managed by animations.css classes */
 }
 
 .hero-subtitle {
     font-size: 1.25rem;
     color: var(--text-secondary);
-    max-width: 600px;
+    max-width: 700px;
     margin-bottom: 3rem;
-    border-left: 2px solid var(--accent);
-    padding-left: 1rem;
+    border-left: 4px solid var(--accent);
+    /* Thicker accent */
+    padding-left: 1.5rem;
+    margin-left: 0.5rem;
+    background: linear-gradient(90deg, rgba(0, 229, 255, 0.05), transparent);
+    /* Subtle highlight */
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+/* Access Points Segment - Container style enhancement */
+.access-points-wrapper {
+    position: relative;
+    padding: 4rem 0;
+    margin-bottom: 4rem;
+}
+
+/* Access Title */
+.section-marker {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: var(--accent);
+    margin-bottom: 2rem;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-marker::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--accent);
 }
 
 .grid-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin: 4rem 0;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
 }
 
+/* Dynamic Card Styling - Replaces basic .card */
 .card {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-subtle);
-    padding: 2rem;
-    border-radius: 8px;
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    background: rgba(10, 15, 20, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 2.5rem;
+    border-radius: 16px;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top right, rgba(0, 229, 255, 0.1), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    border-color: var(--accent);
+    transform: translateY(-10px) scale(1.02);
+    border-color: rgba(0, 229, 255, 0.4);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 229, 255, 0.1);
+}
+
+.card:hover::before {
+    opacity: 1;
 }
 
 .card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
     color: var(--text-primary);
+    position: relative;
+    z-index: 1;
+    transition: color 0.3s;
+}
+
+.card:hover h3 {
+    color: var(--accent);
 }
 
 .card p {
     color: var(--text-secondary);
-    font-size: 0.95rem;
+    font-size: 1rem;
     margin: 0;
+    position: relative;
+    z-index: 1;
+    line-height: 1.6;
 }
 
-.about-section {
+/* Active Corner marks for cards */
+.card-corners::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 0 20px 20px;
+    border-color: transparent transparent var(--accent) transparent;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.card:hover .card-corners::after {
+    opacity: 1;
+}
+
+/* New Isolated About Section (maintained) */
+.about-wrapper {
+    margin: 8rem 0;
+    padding: 4rem;
+    background: rgba(17, 24, 39, 0.4);
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    backdrop-filter: blur(10px);
+    position: relative;
+    /* Full width breakout */
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+.about-inner {
+    max-width: 1200px;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.2fr 0.8fr;
     gap: 4rem;
-    margin: 6rem 0;
     align-items: center;
 }
 
 @media (max-width: 768px) {
-    .about-section {
+    .about-inner {
         grid-template-columns: 1fr;
+        padding: 0 1rem;
     }
 }
 

@@ -1,0 +1,243 @@
+/* assets/css/auth.css - Profound Edition */
+
+/* Login Button in Header - Cyber HUD Style */
+.admin-btn {
+    position: relative;
+    background: rgba(0, 229, 255, 0.05);
+    /* Very subtle tint */
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    color: var(--accent);
+    padding: 0.6rem 1.2rem;
+    font-family: 'Inter', sans-serif;
+    /* Clean font */
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    border-radius: 4px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 10;
+}
+
+/* Authentic HUD "Bracket" Corners */
+.admin-btn::before,
+.admin-btn::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    transition: all 0.4s ease;
+    border: 1px solid transparent;
+}
+
+.admin-btn::before {
+    top: -1px;
+    left: -1px;
+    border-top-color: var(--accent);
+    border-left-color: var(--accent);
+}
+
+.admin-btn::after {
+    bottom: -1px;
+    right: -1px;
+    border-bottom-color: var(--accent);
+    border-right-color: var(--accent);
+}
+
+.admin-btn:hover {
+    background: rgba(0, 229, 255, 0.15);
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+    letter-spacing: 3px;
+    /* Expand on hover */
+    text-shadow: 0 0 8px var(--accent);
+}
+
+.admin-btn:hover::before,
+.admin-btn:hover::after {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    /* Fade out brackets as they expand fully */
+}
+
+/* Modal Overlay - Deep Void */
+.auth-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(5, 5, 10, 0.95);
+    /* Deep dark, almost opaque */
+    backdrop-filter: blur(15px);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.auth-modal.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Modal Content - Holographic Materialization */
+.modal-content {
+    background: linear-gradient(135deg, rgba(20, 30, 40, 0.9), rgba(10, 15, 20, 0.95));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 3rem;
+    width: 90%;
+    max-width: 420px;
+    border-radius: 12px;
+    position: relative;
+    transform: scale(0.9) translateY(20px);
+    opacity: 0;
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* Bouncy pop-in */
+    box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.1), 0 20px 60px rgba(0, 0, 0, 0.8);
+}
+
+.auth-modal.visible .modal-content {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+/* Scanning Beam Animation on Modal */
+.modal-content::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent 40%, rgba(0, 229, 255, 0.1) 50%, transparent 60%);
+    background-size: 100% 200%;
+    animation: scanBeam 3s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+    border-radius: 12px;
+}
+
+@keyframes scanBeam {
+    0% {
+        background-position: 0% 200%;
+    }
+
+    100% {
+        background-position: 0% -100%;
+    }
+}
+
+/* Content Z-Index fix */
+.auth-header,
+.login-form,
+.close-modal {
+    position: relative;
+    z-index: 2;
+}
+
+.auth-header h2 {
+    font-size: 1.8rem;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+}
+
+/* Inputs - Glass Strips */
+.input-group input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.2rem;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    transition: all 0.3s ease;
+    border-radius: 0;
+    /* Sharp edges */
+}
+
+.input-group input:focus {
+    outline: none;
+    background: rgba(0, 229, 255, 0.05);
+    border-color: var(--accent);
+    box-shadow: inset 0 0 20px rgba(0, 229, 255, 0.1);
+}
+
+/* Switch Input Placeholders to Label-like floating behavior? No, keep simple but styled. */
+::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+/* Submit Button - Neon Block */
+.submit-btn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 1.2rem;
+    font-weight: 800;
+    font-size: 0.9rem;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.submit-btn:hover {
+    background: #fff;
+    box-shadow: 0 0 30px var(--accent);
+    transform: translateY(-2px);
+}
+
+/* Close Button */
+.close-modal {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 2rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-modal:hover {
+    color: var(--accent);
+    transform: rotate(90deg);
+    transition: all 0.3s;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 600px) {
+    .modal-content {
+        padding: 1.5rem;
+        width: 95%;
+    }
+
+    .admin-btn span {
+        display: none;
+        /* Hide icon on very small screens? or text? */
+    }
+
+    .admin-btn {
+        padding: 0.5rem;
+        font-size: 0.7rem;
+    }
+}

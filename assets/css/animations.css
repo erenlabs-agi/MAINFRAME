@@ -1,4 +1,6 @@
-/* animations.css */
+/* animations.css - Advanced v3 */
+
+/* Base Fades */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -11,26 +13,11 @@
     }
 }
 
-@keyframes glowPulse {
-    0% {
-        box-shadow: 0 0 5px var(--accent-glow);
-    }
-
-    50% {
-        box-shadow: 0 0 15px var(--accent-glow);
-    }
-
-    100% {
-        box-shadow: 0 0 5px var(--accent-glow);
-    }
-}
-
 .animate-fade-in {
     opacity: 0;
     animation: fadeIn 0.8s ease-out forwards;
 }
 
-/* Stagger delays */
 .delay-1 {
     animation-delay: 0.1s;
 }
@@ -47,55 +34,286 @@
     animation-delay: 0.4s;
 }
 
-/* Scroll reveal utility class - waiting for JS intersection observer */
+/* Scroll Reveal */
 .reveal {
     opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+    transform: translateY(30px) scale(0.98);
+    transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .reveal.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
 }
 
-/* Phone/Device placeholder animation */
-.device-mockup {
-    width: 100%;
-    max-width: 300px;
-    height: 600px;
-    background: #000;
-    border-radius: 30px;
-    border: 8px solid #333;
-    margin: 0 auto;
+/* --- ADVANCED ANIMATIONS --- */
+
+/* Hero Title Professional Gradient Flow */
+.hero-title-advanced {
+    background: linear-gradient(120deg, #ffffff 0%, #ffffff 40%, var(--accent) 50%, #ffffff 60%, #ffffff 100%);
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: shine 5s linear infinite;
+    display: inline-block;
+}
+
+@keyframes shine {
+    to {
+        background-position: 200% center;
+    }
+}
+
+/* Character Split Reveal (Simulated via clip-path for block) */
+.hero-reveal-container {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+    animation: revealText 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+@keyframes revealText {
+    0% {
+        clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    100% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Profile Image Container */
+.profile-container {
     position: relative;
-    box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    border-radius: 20px;
     overflow: hidden;
+    box-shadow: 0 0 30px rgba(0, 229, 255, 0.1);
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    transition: transform 0.5s ease;
 }
 
-.device-screen {
+.profile-container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 50px rgba(0, 229, 255, 0.2);
+    border-color: var(--accent);
+}
+
+.profile-img {
     width: 100%;
     height: 100%;
-    background: #111;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #333;
-    font-size: 2rem;
+    object-fit: cover;
+    filter: grayscale(20%) sepia(10%) hue-rotate(150deg) contrast(1.1);
+    /* Cyan tint */
+    transition: filter 0.5s ease;
 }
 
-.device-mockup::before {
-    content: '';
+.profile-container:hover .profile-img {
+    filter: none;
+}
+
+/* Holographic Scanline Overlay */
+.scanline {
     position: absolute;
     top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40%;
-    height: 20px;
-    background: #333;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+    opacity: 0.5;
+    animation: scan 4s linear infinite;
+    z-index: 2;
+    pointer-events: none;
+}
+
+@keyframes scan {
+    0% {
+        top: -10%;
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.5;
+    }
+
+    90% {
+        opacity: 0.5;
+    }
+
+    100% {
+        top: 110%;
+        opacity: 0;
+    }
+}
+
+/* Glitch Text Effect on Hover */
+.glitch-text {
+    position: relative;
+    display: inline-block;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-primary);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.glitch-text:hover::before {
+    left: 2px;
+    text-shadow: -1px 0 #ff00c1;
+    animation: glitch-anim-1 2s infinite linear alternate-reverse;
+    opacity: 1;
+    background: inherit;
+}
+
+.glitch-text:hover::after {
+    left: -2px;
+    text-shadow: -1px 0 #00fff9;
+    animation: glitch-anim-2 3s infinite linear alternate-reverse;
+    opacity: 1;
+    background: inherit;
+}
+
+@keyframes glitch-anim-1 {
+    0% {
+        clip-path: inset(20% 0 80% 0);
+    }
+
+    20% {
+        clip-path: inset(60% 0 10% 0);
+    }
+
+    40% {
+        clip-path: inset(40% 0 50% 0);
+    }
+
+    60% {
+        clip-path: inset(80% 0 5% 0);
+    }
+
+    80% {
+        clip-path: inset(10% 0 70% 0);
+    }
+
+    100% {
+        clip-path: inset(30% 0 20% 0);
+    }
+}
+
+@keyframes glitch-anim-2 {
+    0% {
+        clip-path: inset(10% 0 60% 0);
+    }
+
+    20% {
+        clip-path: inset(30% 0 10% 0);
+    }
+
+    40% {
+        clip-path: inset(70% 0 50% 0);
+    }
+
+    60% {
+        clip-path: inset(50% 0 30% 0);
+    }
+
+    80% {
+        clip-path: inset(20% 0 80% 0);
+    }
+
+    100% {
+        clip-path: inset(40% 0 10% 0);
+    }
+}
+
+/* Floating Elements */
+.float {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* Hacker Border Flow */
+@keyframes borderFlow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.hacker-box {
+    position: relative;
+    background: rgba(11, 15, 20, 0.8);
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    z-index: 1;
+}
+
+.hacker-box::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    left: -2px;
+    right: -2px;
+    background: linear-gradient(45deg, var(--accent), transparent, var(--accent), transparent);
+    background-size: 400% 400%;
+    z-index: -1;
+    border-radius: 10px;
+    animation: borderFlow 10s ease infinite;
+    opacity: 0.5;
+}
+
+/* Typewriter / Slide In */
+.slide-in-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all 0.8s ease-out;
+}
+
+.slide-in-left.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.slide-in-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.8s ease-out;
+}
+
+.slide-in-right.visible {
+    opacity: 1;
+    transform: translateX(0);
 }
