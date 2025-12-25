@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eren | API</title>
+    <link rel="stylesheet" href="../assets/css/theme.css">
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/layout.css">
+    <link rel="stylesheet" href="../assets/css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <a href="../index.html" style="font-weight:700; font-size: 1.25rem;">EREN</a>
+            <nav>
+                <a href="../index.html" style="color: var(--accent);">← Return to Gateway</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 4rem;">
+        <h1 class="animate-fade-in delay-1">APIs & Integrations</h1>
+        <p class="hero-subtitle animate-fade-in delay-2">System interfaces and documentation.</p>
+
+        <div class="card animate-fade-in delay-3">
+            <h3>Endpont: /v1/telemetry</h3>
+            <p><strong>Method:</strong> GET</p>
+            <p style="margin-top: 0.5rem">Returns current system metrics including CPU, Memory, and Network stats.</p>
+        </div>
+
+        <div class="card animate-fade-in delay-4">
+            <h3>Endpoint: /v1/control/hid</h3>
+            <p><strong>Method:</strong> POST</p>
+            <p style="margin-top: 0.5rem">Send HID commands to connected devices.</p>
+        </div>
+    </main>
+    <script src="../assets/js/main.js"></script>
+</body>
+
+</html>

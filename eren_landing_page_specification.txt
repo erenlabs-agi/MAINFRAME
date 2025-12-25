@@ -1,0 +1,234 @@
+TECHNICAL LANDING PAGE SPECIFICATION
+GitHub Pages – 24×7 Availability
+Owner: Eren
+
+==================================================
+1. SYSTEM ARCHITECTURE OVERVIEW
+==================================================
+
+1.1 Deployment Model
+- Hosting: GitHub Pages (static hosting)
+- Runtime: Client-side only (HTML/CSS/JS)
+- Availability: Continuous via GitHub CDN
+- Backend (future-ready):
+  - Cloudflare Tunnel exposing local PC/server
+  - HTTPS API endpoints
+  - Frontend uses Fetch/WebSocket APIs
+
+Design principle:
+The landing page must remain operational even if all backend systems are offline.
+
+--------------------------------------------------
+
+2. TECHNOLOGY STACK
+--------------------------------------------------
+
+Core Stack:
+- HTML5 (semantic markup)
+- CSS3 (custom, modular styles)
+- JavaScript ES6+ (vanilla)
+
+Optional Enhancements:
+- CSS Variables for theming
+- IntersectionObserver API for scroll animations
+- Web Animations API / CSS transitions
+- SVG icons (inline)
+- Fetch API placeholders for live data
+
+No framework dependency required.
+
+--------------------------------------------------
+
+3. PROJECT STRUCTURE
+--------------------------------------------------
+
+/
+├── index.html
+├── assets/
+│   ├── css/
+│   │   ├── base.css
+│   │   ├── theme.css
+│   │   ├── layout.css
+│   │   └── animations.css
+│   ├── js/
+│   │   ├── main.js
+│   │   ├── animations.js
+│   │   └── api.js
+│   └── media/
+│       └── icons.svg
+├── pages/
+│   ├── research.html
+│   ├── live.html
+│   ├── api.html
+│   └── contact.html
+└── README.md
+
+--------------------------------------------------
+
+4. DESIGN SYSTEM
+--------------------------------------------------
+
+4.1 Color Variables (Dark Theme)
+
+:root
+--bg-primary: #0b0f14
+--bg-secondary: #111827
+--text-primary: #e5e7eb
+--text-secondary: #9ca3af
+--accent: #38bdf8
+--border-subtle: rgba(255,255,255,0.08)
+
+Rules:
+- Accent color only for interactive elements
+- WCAG AA contrast compliance
+
+--------------------------------------------------
+
+4.2 Typography
+- Font: Inter / system-ui / sans-serif
+- Hero Title: clamp(1.8rem, 4vw, 3rem)
+- Section Title: 1.4–1.8rem
+- Body Text: ~1rem
+- Line height: 1.6–1.75
+
+--------------------------------------------------
+
+5. PAGE SECTIONS
+--------------------------------------------------
+
+5.1 Hero Section
+Purpose:
+Immediate context of system role.
+
+Content:
+- Title
+- Short professional description
+
+Animation:
+- Fade-in + upward motion on load
+
+--------------------------------------------------
+
+5.2 Interactive Navigation Cards
+
+Components:
+- Research Logs
+- Live Data Streams
+- APIs & Integrations
+- Contact
+
+Behavior:
+- Hover scale (1.03)
+- Click navigation
+- Keyboard accessible
+
+Animation:
+- Scroll reveal via IntersectionObserver
+- Staggered entry
+
+--------------------------------------------------
+
+5.3 Section Definitions
+
+Research Logs:
+- Static HTML initially
+- Future CI-generated content
+
+Live Data Streams:
+- Fetch/WebSocket placeholders
+- Offline-safe UI states
+
+APIs & Integrations:
+- Endpoint list
+- Static JSON examples
+- Documentation placeholders
+
+Contact:
+- Email / phone
+- Animated reveal
+- Click-to-copy logic
+
+--------------------------------------------------
+
+5.4 About Me Section
+
+Layout:
+- Two-column desktop
+- Single-column mobile
+
+Content:
+- Professional background
+- AGI research focus
+- Navigation guidance
+
+Phone Animation:
+- Scroll-triggered reveal
+- Bot-resistant JS assembly
+
+--------------------------------------------------
+
+6. FOOTER
+--------------------------------------------------
+
+Content:
+© 2025 Eren. All rights reserved.
+
+Style:
+- Minimal
+- Dark theme aligned
+
+--------------------------------------------------
+
+7. JAVASCRIPT ARCHITECTURE
+--------------------------------------------------
+
+main.js:
+- Navigation handling
+- App initialization
+
+animations.js:
+- IntersectionObserver logic
+- CSS class toggling
+
+api.js:
+- Placeholder API calls
+- Timeout and error handling
+
+No inline scripts.
+
+--------------------------------------------------
+
+8. PERFORMANCE TARGETS
+--------------------------------------------------
+
+- Minimal assets
+- Deferred JS loading
+- Lighthouse:
+  Performance ≥ 95
+  Accessibility ≥ 95
+  SEO ≥ 90
+
+--------------------------------------------------
+
+9. SECURITY & STABILITY
+--------------------------------------------------
+
+- No inline user input handling
+- No eval or dynamic code execution
+- HTTPS only
+- Cloudflare-ready
+
+--------------------------------------------------
+
+10. FUTURE EXTENSIONS
+--------------------------------------------------
+
+- CI-generated research logs
+- Live WebSocket streams
+- Cloudflare Access authentication
+- PWA support
+- Migration-ready for Astro / Next (static export)
+
+==================================================
+END OF SPECIFICATION
+==================================================

@@ -1,0 +1,12 @@
+/* theme.css */
+:root {
+    --bg-primary: #0b0f14;
+    --bg-secondary: #111827;
+    --bg-card: rgba(17, 24, 39, 0.7);
+    --text-primary: #e5e7eb;
+    --text-secondary: #9ca3af;
+    --accent: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.2);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+}
