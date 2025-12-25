@@ -2,8 +2,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('System Initialized: EREN_LANDING_v1.0');
 
-    // Initialize animations
-    if (window.initAnimations) {
-        window.initAnimations();
-    }
+    // Animations are now self-initializing in animations.js
 });

@@ -1,5 +1,5 @@
 /* animations.js */
-window.initAnimations = function () {
+document.addEventListener('DOMContentLoaded', () => {
     const observerOptions = {
         root: null,
         rootMargin: '0px',
@@ -10,11 +10,12 @@ window.initAnimations = function () {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
-                // observer.unobserve(entry.target); // Optional: keep observing to toggle? No, reveal once usually better.
             }
         });
     }, observerOptions);
 
     const revealElements = document.querySelectorAll('.reveal');
     revealElements.forEach(el => observer.observe(el));
-};
+
+    console.log(`Animations Initialized: Observing ${revealElements.length} elements`);
+});
